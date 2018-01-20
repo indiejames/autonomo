@@ -4,6 +4,7 @@ defmodule Mower do
   use Constants
   alias ElixirALE.SPI
   alias ElixirALE.GPIO
+  require Logger
 
   @doc """
   Calculates two byte binary representing the SPI command to set the DAC to the
@@ -44,6 +45,7 @@ defmodule Mower do
   Velocity must be in the range -1 to 1.
   """
   def set_velocity(direction_pid, speed_pid, velocity) do
+    Logger.debug("Setting velocity to #{velocity}")
     speed = abs(velocity)
     set_direction_for_velocity(direction_pid, velocity)
     set_speed(speed_pid, speed)

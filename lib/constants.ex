@@ -23,9 +23,9 @@ defmodule Constants do
       @sys_clk_scale 1_000_000_000
 
       # PWM max value
-      @pwm_max 2.0
+      @pwm_max 2.0e-3
       # PWM min value
-      @pwm_min 1.0
+      @pwm_min 1.0e-3
 
       # Max velocity value
       @max_vel 1.0
