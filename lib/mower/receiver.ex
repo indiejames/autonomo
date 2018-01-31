@@ -62,7 +62,10 @@ defmodule Mower.Receiver do
   defp velocity(pulse_width) do
     m = (@max_vel - @min_vel) / (@pwm_max - @pwm_min)
     b = 1.0 - m * @pwm_max
-    m * pulse_width + b
+    vel = m * pulse_width + b
+    # ignore really small velocities to reduce jitter
+    if abs(vel) < @vel_threshold, do: 0.0, else: vel
+
   end
 
   # Compute the weighted average of a window of samples
@@ -91,8 +94,7 @@ defmodule Mower.Receiver do
     # a rising or trailing edge
     if pulse_width < 2 * @pwm_max do
       Logger.debug("PULSE WIDTHS: #{inspect(recv_times)}")
-      # Force time into @pwm_min..@pwm_max range
-      Logger.debug("Original pulse width = #{pulse_width}")
+      # Force pulse width into @pwm_min..@pwm_max range
       pulse_width = min(pulse_width, @pwm_max) |> max(@pwm_min)
       Logger.debug("Pulse width = #{pulse_width}")
 
