@@ -22,6 +22,10 @@ defmodule Mower.Receiver do
     0.00628285
   ]
 
+  # @weights [
+  #   1.0
+  # ]
+
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
@@ -31,10 +35,10 @@ defmodule Mower.Receiver do
     # TODO add state that will help in debugging
     Logger.debug("Starting GPIO services")
     Logger.debug("Strarting SPI server for right side wheels")
-    {:ok, right_spi_pid} = SPI.start_link("spidev0.0")
+    {:ok, right_spi_pid} = SPI.start_link("spidev0.1")
 
     Logger.debug("Strarting SPI server for left side wheels")
-    {:ok, left_spi_pid} = SPI.start_link("spidev0.1")
+    {:ok, left_spi_pid} = SPI.start_link("spidev0.0")
 
     Logger.debug("Starting pin #{@right_motor_direction_pin} as output")
     {:ok, right_dir_pid} = GPIO.start_link(@right_motor_direction_pin, :output)
@@ -60,9 +64,8 @@ defmodule Mower.Receiver do
 
   # Compute the velocity for the given PWM pulse width
   defp velocity(pulse_width) do
-    m = (@max_vel - @min_vel) / (@pwm_max - @pwm_min)
-    b = 1.0 - m * @pwm_max
-    vel = m * pulse_width + b
+    vel = (pulse_width - @pwm_center) / @pwm_half_width
+    
     # ignore really small velocities to reduce jitter
     if abs(vel) < @vel_threshold, do: 0.0, else: vel
 
@@ -85,19 +88,17 @@ defmodule Mower.Receiver do
   defp listen_forever(input_pid, output_dir_pid, output_spd_pid) do
     # Start listening for interrupts on rising and falling edges
     GPIO.set_int(input_pid, :both)
+    # Start with 0 velocity
+    # Mower.set_velocity(output_dir_pid, output_spd_pid, 0)
     listen_loop(output_dir_pid, output_spd_pid, 0, [])
   end
 
   # Set the velocity for a received PWM pulse
   defp set_velocity(output_dir_pid, output_spd_pid, pulse_width, recv_times) do
     # Guard against pulses that are too long - these could be the result of having missed 
-    # a rising or trailing edge
-    if pulse_width < 2 * @pwm_max do
-      Logger.debug("PULSE WIDTHS: #{inspect(recv_times)}")
-      # Force pulse width into @pwm_min..@pwm_max range
-      pulse_width = min(pulse_width, @pwm_max) |> max(@pwm_min)
-      Logger.debug("Pulse width = #{pulse_width}")
-
+    # a rising or trailing edge. Also guard against phantom pulses that are too short.
+    if pulse_width <= @pwm_max && pulse_width >= @pwm_min do
+  
       recv_times = Enum.concat([pulse_width], recv_times) |> Enum.take(Enum.count(@weights))
       smoothed_time = smooth_times(recv_times)
       vel = velocity(smoothed_time)
@@ -112,11 +113,13 @@ defmodule Mower.Receiver do
     # Infinite loop receiving interrupts from gpio
     receive do
       {:gpio_interrupt, _p, :rising} ->
-        listen_loop(output_dir_pid, output_spd_pid, System.system_time(), recv_times)
+        listen_loop(output_dir_pid, output_spd_pid, System.monotonic_time(), recv_times)
 
       {:gpio_interrupt, _p, :falling} ->
         # elapsed time since rising edge
-        pulse_width = (System.system_time() - rising_edge_timestamp) / @sys_clk_scale
+        pulse_width = (System.monotonic_time() - rising_edge_timestamp) |>
+                       System.convert_time_unit(:native, :micro_seconds)
+        pulse_width = pulse_width / 1.0e6
         recv_times = set_velocity(output_dir_pid, output_spd_pid, pulse_width, recv_times)
         listen_loop(output_dir_pid, output_spd_pid, 0, recv_times)
     end

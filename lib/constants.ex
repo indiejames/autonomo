@@ -9,12 +9,7 @@ defmodule Constants do
       @max_speed 0b111111111111
       # Unbuffered Vref with output gain = 1
       @configuration_bits 0b0111000000000000
-      # Raspberry Pi3 GPIO pins for controlling motor direction
-      @right_motor_direction_pin 5
-      @left_motor_direction_pin 6
-      # Raspberry Pi3 GPIO pins for reading velocity control inputs
-      @right_motor_velocity_input_pin 19
-      @left_motor_velocity_input_pin 20
+
       # Values for controlling motor directions
       @motor_forward 1
       @motor_backward 0
@@ -26,6 +21,10 @@ defmodule Constants do
       @pwm_max 2.0e-3
       # PWM min value
       @pwm_min 1.0e-3
+      # PWM center value
+      @pwm_center 1.5e-3
+      # PWM half pulse width
+      @pwm_half_width 5.0e-4 
 
       # Max velocity value
       @max_vel 1.0
@@ -33,7 +32,20 @@ defmodule Constants do
       @min_vel -1.0
 
       # Velocity threshold to reduce jitter
-      @vel_threshold 0.05
+      @vel_threshold 0.1
+
+      # Speed weight - to reduce speed
+      @speed_weight 0.9
+      
+      #
+      # GPIO pin assignments - NOTE GPIO pin #s do not correspond to physical pin #s
+      #
+      # Raspberry Pi3 GPIO pins for controlling motor direction
+      @right_motor_direction_pin 5
+      @left_motor_direction_pin 6
+      # Raspberry Pi3 GPIO pins for reading velocity control inputs
+      @right_motor_velocity_input_pin 19
+      @left_motor_velocity_input_pin 20
     end
   end
 end

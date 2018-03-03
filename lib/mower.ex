@@ -45,7 +45,7 @@ defmodule Mower do
   Velocity must be in the range -1 to 1.
   """
   def set_velocity(direction_pid, speed_pid, velocity) do
-    Logger.debug("Setting velocity to #{velocity}")
+    Logger.debug("Setting velocity to #{velocity} using speed pid #{Kernel.inspect(speed_pid)}")
     speed = abs(velocity)
     set_direction_for_velocity(direction_pid, velocity)
     set_speed(speed_pid, speed)
