@@ -71,6 +71,7 @@ defmodule Mower.Mixfile do
       {:nerves_runtime, "~> 0.4"},
       {:nerves_leds, "~> 0.7"},
       {:elixir_ale, "~> 1.0"},
+      {:pigpiox, "~> 0.1.1"},
       {:binary, "~> 0.0.4"}
     ] ++ system(target)
   end

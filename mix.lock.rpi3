@@ -11,5 +11,6 @@
   "nerves_system_rpi3": {:hex, :nerves_system_rpi3, "0.18.0", "f2fe9d6ff295fe13ce88578391c3e4e8eea83bdb5bb29fc27d5da02c94d2a96a", [], [{:nerves, "~> 0.8", [hex: :nerves, repo: "hexpm", optional: false]}, {:nerves_system_br, "~> 0.15.0", [hex: :nerves_system_br, repo: "hexpm", optional: false]}, {:nerves_toolchain_arm_unknown_linux_gnueabihf, "~> 0.12.1", [hex: :nerves_toolchain_arm_unknown_linux_gnueabihf, repo: "hexpm", optional: false]}], "hexpm"},
   "nerves_toolchain_arm_unknown_linux_gnueabihf": {:hex, :nerves_toolchain_arm_unknown_linux_gnueabihf, "0.12.1", "8a65f0123cfee1d229b32c03ce5ee87ce587e6dc0b2dda7de71f290b2fa24386", [], [{:nerves, "~> 0.8", [hex: :nerves, repo: "hexpm", optional: false]}, {:nerves_toolchain_ctng, "~> 1.2", [hex: :nerves_toolchain_ctng, repo: "hexpm", optional: false]}], "hexpm"},
   "nerves_toolchain_ctng": {:hex, :nerves_toolchain_ctng, "1.2.1", "78c7c6cbd086f6b5c0302ed4f1950a3eb9ae8a38d97a98d5266a67d53008b40d", [], [], "hexpm"},
+  "pigpiox": {:hex, :pigpiox, "0.1.1", "b4582c25c57d3c7ea86e262a0f603c82b77c7583d69dffa8495e0f721cad88a4", [], [], "hexpm"},
   "system_registry": {:hex, :system_registry, "0.6.0", "31642177e6002d3cff2ada3553ed4e9c0a6ca015797d62d7d17c0ab8696185fc", [], [], "hexpm"},
 }
