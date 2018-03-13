@@ -32,7 +32,7 @@ defmodule Constants do
       @min_vel -1.0
 
       # Velocity threshold to reduce jitter
-      @vel_threshold 0.1
+      @vel_threshold 0.005
 
       # Speed weight - to reduce speed
       @speed_weight 0.9
@@ -44,8 +44,8 @@ defmodule Constants do
       @right_motor_direction_pin 5
       @left_motor_direction_pin 6
       # Raspberry Pi3 GPIO pins for reading velocity control inputs
-      @right_motor_velocity_input_pin 19
-      @left_motor_velocity_input_pin 20
+      @right_motor_velocity_input_pin "19"
+      @left_motor_velocity_input_pin "20"
     end
   end
 end
