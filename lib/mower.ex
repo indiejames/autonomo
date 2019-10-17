@@ -23,7 +23,7 @@ defmodule Mower do
   # Set the speed of the controller associated with the given pid.
   # Speed must be in the range 0 to 1.
   defp set_speed(pid, speed) when speed >= 0 and speed <= 1 do
-    spd = round(speed * @max_speed)
+    spd = round(@speed_weight * speed * @max_speed)
     SPI.transfer(pid, command_for_speed(spd))
   end
 

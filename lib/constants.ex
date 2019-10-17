@@ -24,7 +24,7 @@ defmodule Constants do
       # PWM center value
       @pwm_center 1.5e-3
       # PWM half pulse width
-      @pwm_half_width 5.0e-4 
+      @pwm_half_width 5.0e-4
 
       # Max velocity value
       @max_vel 1.0
@@ -35,8 +35,8 @@ defmodule Constants do
       @vel_threshold 0.005
 
       # Speed weight - to reduce speed
-      @speed_weight 0.9
-      
+      @speed_weight 0.1
+
       #
       # GPIO pin assignments - NOTE GPIO pin #s do not correspond to physical pin #s
       #
