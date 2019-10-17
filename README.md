@@ -1,4 +1,7 @@
-# Mower
+# Autonomo
+
+This project is the source code for an autonomous lawn mower. It is very much a
+work in progress.
 
 ## Targets
 
